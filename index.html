@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A special Valentine's Day message just for you. Will you be my Valentine?">
+  <title>Will You Be My Valentine? 💕</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+/* === Design Tokens === */
+:root {
+  --pink-primary: #E8395A;
+  --pink-light: #FFF0F3;
+  --pink-soft: #FFB6C8;
+  --pink-glow: #FF6B8A;
+  --pink-deep: #D42B4E;
+  --white: #FFFFFF;
+  --dark: #2D2D2D;
+  --gray-light: #F7F7F7;
+  --gray-border: #E0E0E0;
+  --gray-text: #888888;
+  --gold: #FFD700;
+  --cream: #FDF6F0;
+  --font-heading: 'Playfair Display', 'Georgia', serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+  --shadow-card: 0 8px 32px rgba(232, 57, 90, 0.12), 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-btn: 0 4px 16px rgba(232, 57, 90, 0.3);
+  --shadow-btn-hover: 0 6px 24px rgba(232, 57, 90, 0.45);
+  --radius-card: 16px;
+  --radius-btn: 50px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === Reset & Base === */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  font-family: var(--font-body);
+  background: var(--pink-light);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(255, 182, 200, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(255, 182, 200, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(232, 57, 90, 0.05) 0%, transparent 50%);
+  color: var(--dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* === Floating Hearts === */
+.floating-hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+.floating-heart { position: absolute; color: var(--pink-soft); opacity: 0; animation: float linear infinite; will-change: transform, opacity; }
+
+/* === Container === */
+.container {
+  position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 100vh; padding: 40px 20px; max-width: 600px; margin: 0 auto; animation: fadeInUp 0.8s ease-out;
+}
+
+/* === Logo === */
+.logo { display: flex; align-items: center; gap: 4px; margin-bottom: 24px; user-select: none; }
+.logo-icon { font-size: 18px; }
+.logo-text { font-family: var(--font-heading); font-weight: 800; font-size: 18px; letter-spacing: 3px; color: var(--dark); text-transform: uppercase; }
+.logo-heart { color: var(--pink-primary); font-size: 16px; }
+
+/* === Polaroid Card === */
+.polaroid { position: relative; margin-bottom: 32px; }
+.polaroid-inner {
+  background: var(--white); padding: 14px 14px 40px 14px; border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card); transform: rotate(-2deg); transition: var(--transition); max-width: 280px; width: 100%;
+}
+.polaroid:hover .polaroid-inner { transform: rotate(0deg) scale(1.02); box-shadow: 0 12px 40px rgba(232, 57, 90, 0.18), 0 4px 12px rgba(0,0,0,0.08); }
+.polaroid-image { background: #F5E6D3; border-radius: 8px; overflow: hidden; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
+.cat-svg { width: 100%; height: 100%; display: block; }
+.cat-heart { animation: pulse 1.5s ease-in-out infinite; transform-origin: center center; }
+.polaroid-heart {
+  position: absolute; bottom: 30px; right: -12px; width: 40px; height: 40px; background: var(--pink-primary);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(232, 57, 90, 0.35); animation: pulse 2s ease-in-out infinite; z-index: 2;
+}
+.polaroid-heart span { font-size: 18px; line-height: 1; }
+
+/* === Heading === */
+.heading { font-family: var(--font-heading); font-weight: 900; font-size: 48px; line-height: 1.15; text-align: center; color: var(--dark); margin-bottom: 16px; letter-spacing: -0.5px; }
+.heading-accent { color: var(--dark); display: block; }
+
+/* === Subtitle === */
+.subtitle { font-family: var(--font-body); font-size: 16px; font-weight: 400; color: var(--gray-text); text-align: center; line-height: 1.6; margin-bottom: 36px; min-height: 52px; transition: opacity 0.3s ease; }
+.subtitle.fade-out { opacity: 0; transform: translateY(-4px); }
+.subtitle.fade-in { opacity: 1; transform: translateY(0); }
+
+/* === Buttons === */
+.buttons { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 40px; flex-wrap: wrap; position: relative; min-height: 80px; }
+.btn { font-family: var(--font-body); font-weight: 700; border: none; cursor: pointer; transition: var(--transition); outline: none; white-space: nowrap; user-select: none; -webkit-tap-highlight-color: transparent; }
+.btn:focus-visible { outline: 3px solid var(--pink-glow); outline-offset: 3px; }
+.btn-yes {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, var(--pink-primary) 0%, var(--pink-glow) 100%);
+  color: var(--white); font-size: 18px; padding: 16px 40px; border-radius: var(--radius-btn);
+  box-shadow: var(--shadow-btn); transform-origin: center center;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); animation: heartBeat 2s ease-in-out infinite; animation-delay: 3s;
+}
+.btn-yes:hover { background: linear-gradient(135deg, var(--pink-deep) 0%, var(--pink-primary) 100%); box-shadow: var(--shadow-btn-hover); transform: scale(1.05); }
+.btn-yes:active { transform: scale(0.97); }
+.btn-heart { font-size: 16px; animation: pulse 1.2s ease-in-out infinite; }
+.btn-no {
+  display: inline-flex; align-items: center; gap: 6px; background: var(--white); color: var(--gray-text);
+  font-size: 14px; padding: 10px 24px; border-radius: var(--radius-btn); border: 1.5px solid var(--gray-border);
+  transform-origin: center center; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative;
+}
+.btn-no:hover { border-color: var(--pink-soft); color: var(--pink-primary); animation: shake 0.4s ease-in-out; }
+.btn-no.dodging { position: absolute; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 10; }
+.btn-no-emoji { font-size: 14px; }
+
+/* === Footer === */
+.footer { font-family: var(--font-body); font-size: 12px; font-weight: 500; letter-spacing: 2px; color: #BBBBBB; text-transform: uppercase; text-align: center; }
+
+/* === Success Overlay === */
+.success-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(135deg, #FFF0F3 0%, #FFE4EC 50%, #FFF5F7 100%);
+  z-index: 1000; display: none; align-items: center; justify-content: center; overflow: hidden;
+}
+.success-overlay.active { display: flex; animation: celebrate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.success-content { text-align: center; padding: 40px 24px; max-width: 500px; z-index: 2; position: relative; }
+.success-emoji { font-size: 56px; margin-bottom: 16px; animation: heartBeat 1.5s ease-in-out infinite; }
+.success-heading { font-family: var(--font-heading); font-weight: 900; font-size: 64px; color: var(--pink-primary); margin-bottom: 8px; text-shadow: 0 2px 20px rgba(232, 57, 90, 0.2); }
+.success-subheading { font-family: var(--font-body); font-size: 20px; color: var(--pink-glow); font-weight: 600; margin-bottom: 28px; }
+.success-gif-frame { width: 280px; height: 200px; margin: 0 auto 24px; border-radius: 16px; overflow: hidden; background: var(--white); box-shadow: 0 8px 32px rgba(232, 57, 90, 0.15); position: relative; }
+.success-gif { width: 100%; height: 100%; object-fit: cover; display: none; }
+.success-gif.loaded { display: block; }
+.gif-loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: var(--pink-soft); animation: pulse 1.5s ease-in-out infinite; }
+.gif-loading.hidden { display: none; }
+.success-message { font-family: var(--font-body); font-size: 16px; color: var(--dark); line-height: 1.6; margin-bottom: 20px; }
+.success-hearts { display: flex; justify-content: center; gap: 12px; font-size: 28px; }
+.success-hearts span { animation: float 3s ease-in-out infinite; }
+.success-hearts span:nth-child(2) { animation-delay: 0.3s; }
+.success-hearts span:nth-child(3) { animation-delay: 0.6s; }
+.success-hearts span:nth-child(4) { animation-delay: 0.9s; }
+.success-hearts span:nth-child(5) { animation-delay: 1.2s; }
+#confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+
+/* === Animations === */
+@keyframes float {
+  0% { opacity: 0; transform: translateY(100vh) translateX(0) rotate(0deg); }
+  10% { opacity: 0.7; }
+  50% { opacity: 0.5; transform: translateY(50vh) translateX(20px) rotate(180deg); }
+  90% { opacity: 0.2; }
+  100% { opacity: 0; transform: translateY(-10vh) translateX(-10px) rotate(360deg); }
+}
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+@keyframes fadeInUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); } 20% { transform: translateX(-6px) rotate(-2deg); }
+  40% { transform: translateX(6px) rotate(2deg); } 60% { transform: translateX(-4px) rotate(-1deg); }
+  80% { transform: translateX(4px) rotate(1deg); }
+}
+@keyframes celebrate { 0% { opacity: 0; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); } 25% { opacity: 0.8; transform: scale(0.8) rotate(90deg); }
+  50% { opacity: 1; transform: scale(1.2) rotate(180deg); } 75% { opacity: 0.7; transform: scale(0.9) rotate(270deg); }
+}
+@keyframes heartBeat { 0%, 100% { transform: scale(1); } 14% { transform: scale(1.08); } 28% { transform: scale(1); } 42% { transform: scale(1.08); } 56% { transform: scale(1); } }
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .heading { font-size: 36px; } .success-heading { font-size: 48px; }
+  .polaroid-inner { max-width: 240px; padding: 12px 12px 32px 12px; } .container { padding: 30px 16px; }
+}
+@media (max-width: 480px) {
+  .heading { font-size: 28px; } .success-heading { font-size: 40px; } .subtitle { font-size: 14px; }
+  .polaroid-inner { max-width: 200px; padding: 10px 10px 28px 10px; }
+  .polaroid-heart { width: 34px; height: 34px; right: -8px; bottom: 22px; } .polaroid-heart span { font-size: 15px; }
+  .btn-yes { padding: 14px 32px; font-size: 16px; } .btn-no { padding: 8px 18px; font-size: 13px; }
+  .buttons { gap: 12px; } .container { padding: 24px 12px; }
+  .success-gif-frame { width: 240px; height: 170px; } .success-emoji { font-size: 40px; } .success-subheading { font-size: 17px; }
+}
+@media (max-width: 360px) { .heading { font-size: 24px; } .polaroid-inner { max-width: 180px; } .btn-yes { padding: 12px 28px; font-size: 15px; } }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Hearts Background -->
+  <div class="floating-hearts" id="floatingHearts" aria-hidden="true"></div>
+
+  <!-- Main Content -->
+  <main class="container" id="mainContent">
+    <header class="logo" aria-label="Valentine's Day">
+      <span class="logo-icon">💕</span>
+      <span class="logo-text">V<span class="logo-heart">♥</span>RK</span>
+    </header>
+
+    <div class="polaroid" id="polaroid">
+      <div class="polaroid-inner">
+        <div class="polaroid-image">
+          <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" class="cat-svg" aria-label="Cute cat holding a heart">
+            <rect width="300" height="300" fill="#F5E6D3" rx="4"/>
+            <ellipse cx="150" cy="210" rx="55" ry="50" fill="#FAFAFA" stroke="#E8E8E8" stroke-width="1"/>
+            <circle cx="150" cy="135" r="45" fill="#FAFAFA" stroke="#E8E8E8" stroke-width="1"/>
+            <polygon points="115,100 105,60 135,90" fill="#FAFAFA" stroke="#E8E8E8" stroke-width="1"/>
+            <polygon points="118,97 111,68 132,92" fill="#FFD4DB"/>
+            <polygon points="185,100 195,60 165,90" fill="#FAFAFA" stroke="#E8E8E8" stroke-width="1"/>
+            <polygon points="182,97 189,68 168,92" fill="#FFD4DB"/>
+            <path d="M128,130 Q135,122 142,130" fill="none" stroke="#2D2D2D" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M158,130 Q165,122 172,130" fill="none" stroke="#2D2D2D" stroke-width="2.5" stroke-linecap="round"/>
+            <ellipse cx="150" cy="140" rx="3" ry="2.5" fill="#FFB6C8"/>
+            <path d="M147,143 Q150,147 153,143" fill="none" stroke="#2D2D2D" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="100" y1="135" x2="130" y2="138" stroke="#D0D0D0" stroke-width="1"/>
+            <line x1="100" y1="142" x2="130" y2="142" stroke="#D0D0D0" stroke-width="1"/>
+            <line x1="170" y1="138" x2="200" y2="135" stroke="#D0D0D0" stroke-width="1"/>
+            <line x1="170" y1="142" x2="200" y2="142" stroke="#D0D0D0" stroke-width="1"/>
+            <path d="M115,185 Q120,200 140,210" fill="none" stroke="#E8E8E8" stroke-width="8" stroke-linecap="round"/>
+            <path d="M185,185 Q180,200 160,210" fill="none" stroke="#E8E8E8" stroke-width="8" stroke-linecap="round"/>
+            <path d="M115,185 Q120,200 140,210" fill="none" stroke="#FAFAFA" stroke-width="6" stroke-linecap="round"/>
+            <path d="M185,185 Q180,200 160,210" fill="none" stroke="#FAFAFA" stroke-width="6" stroke-linecap="round"/>
+            <g transform="translate(150,195) scale(1.3)" class="cat-heart">
+              <path d="M0,-12 C-5,-22 -20,-22 -20,-10 C-20,0 0,15 0,15 C0,15 20,0 20,-10 C20,-22 5,-22 0,-12Z" fill="#2D2D2D"/>
+            </g>
+            <circle cx="120" cy="142" r="8" fill="#FFD4DB" opacity="0.5"/>
+            <circle cx="180" cy="142" r="8" fill="#FFD4DB" opacity="0.5"/>
+            <ellipse cx="130" cy="250" rx="15" ry="8" fill="#FAFAFA" stroke="#E8E8E8" stroke-width="1"/>
+            <ellipse cx="170" cy="250" rx="15" ry="8" fill="#FAFAFA" stroke="#E8E8E8" stroke-width="1"/>
+          </svg>
+        </div>
+      </div>
+      <div class="polaroid-heart" aria-hidden="true"><span>💖</span></div>
+    </div>
+
+    <h1 class="heading" id="heading">Will you be my<br><span class="heading-accent">Valentine?</span></h1>
+
+    <p class="subtitle" id="subtitle">You're the purr-fect one for me!<br>My heart beats only for you.</p>
+
+    <div class="buttons" id="buttonsContainer">
+      <button class="btn btn-yes" id="btnYes" aria-label="Yes, I'll be your Valentine"><span class="btn-heart">♥</span> YES!</button>
+      <button class="btn btn-no" id="btnNo" aria-label="No, decline Valentine request">No <span class="btn-no-emoji">😊</span></button>
+    </div>
+
+    <footer class="footer" aria-label="Footer">🐾 WITH EXTRA LOVE & KITTY HUGS 🐾</footer>
+  </main>
+
+  <!-- Success Overlay -->
+  <div class="success-overlay" id="successOverlay" role="dialog" aria-label="Celebration" aria-hidden="true">
+    <div class="success-content" id="successContent">
+      <div class="success-emoji">🎉💕🥳</div>
+      <h2 class="success-heading">YAYYY!</h2>
+      <p class="success-subheading">I knew you'd say yes! 💗</p>
+      <div class="success-gif-frame" id="gifFrame">
+        <img id="successGif" src="assets/valentine_love.png" alt="Happy Valentine's Day" class="success-gif loaded" />
+      </div>
+      <p class="success-message">You just made me the happiest person in the world! 🌍✨</p>
+      <div class="success-hearts" aria-hidden="true">
+        <span>💕</span><span>💖</span><span>💗</span><span>💓</span><span>💝</span>
+      </div>
+    </div>
+    <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+  </div>
+
+  <script>
+(function () {
+  'use strict';
+
+  const state = { noClickCount: 0, yesButtonScale: 1, noButtonScale: 1, isComplete: false, isDodging: false };
+
+  const messages = [
+    "You're the purr-fect one for me!\nMy heart beats only for you.",
+    "Are you sure? 🥺", "Pretty please? 💕", "Think again... 🤔",
+    "I'll be really sad 😢", "You're breaking my heart 💔", "But I made this for you! 🎁",
+    "Just say yes already! 😭", "I'll give you chocolates 🍫", "And flowers too! 🌹",
+    "I promise to be the best! ✨", "Don't make the kitty cry 😿", "My heart only beats for you 💓",
+    "You're the purr-fect one! 🐱", "Say yes and I'll stop bugging you 🐛",
+    "I'll cook your favorite meal 🍝", "I'll watch whatever you want 📺", "Even horror movies 👻",
+    "I'll carry your bags while shopping 🛍️", "Unlimited cuddles included 🤗",
+    "Plus forehead kisses 😘", "I'll share my dessert with you 🍰", "That's how serious I am! 🫡",
+    "You're running out of excuses! 😏", "The Yes button is RIGHT THERE ➡️",
+    "It's getting bigger, can you see it? 👀", "Resistance is futile 🤖",
+    "Just one little click! ☝️", "You know you want to... 😉", "Last chance... 🥹",
+    "Okay fine, but I still like you 💗",
+  ];
+
+  const btnYes = document.getElementById('btnYes');
+  const btnNo = document.getElementById('btnNo');
+  const subtitle = document.getElementById('subtitle');
+  const buttonsContainer = document.getElementById('buttonsContainer');
+  const successOverlay = document.getElementById('successOverlay');
+  const successGif = document.getElementById('successGif');
+  const gifLoading = document.getElementById('gifLoading');
+  const confettiCanvas = document.getElementById('confettiCanvas');
+  const floatingHeartsContainer = document.getElementById('floatingHearts');
+
+  function initApp() {
+    btnYes.addEventListener('click', handleYesClick);
+    btnNo.addEventListener('click', handleNoClick);
+    btnNo.addEventListener('mouseenter', () => { if (state.noClickCount >= 5 && !state.isComplete) dodgeNoButton(); });
+    btnNo.addEventListener('touchstart', (e) => {
+      if (state.noClickCount >= 5 && !state.isComplete) { e.preventDefault(); dodgeNoButton(); setTimeout(() => handleNoClick(), 100); }
+    }, { passive: false });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && document.activeElement === btnYes) handleYesClick(); });
+    createFloatingHearts();
+  }
+
+  function handleNoClick() {
+    if (state.isComplete) return;
+    state.noClickCount++;
+    const msgIndex = Math.min(state.noClickCount, messages.length - 1);
+    updateSubtitle(msgIndex);
+    state.yesButtonScale = getYesScale(state.noClickCount);
+    growYesButton(state.yesButtonScale);
+    state.noButtonScale = getNoScale(state.noClickCount);
+    shrinkNoButton(state.noButtonScale);
+    if (state.noClickCount >= 5) btnNo.classList.add('dodging');
+    if (state.noClickCount >= 15) btnYes.style.animationDuration = '1s';
+    if (state.noClickCount >= 25) btnYes.style.animationDuration = '0.6s';
+  }
+
+  function handleYesClick() { if (state.isComplete) return; state.isComplete = true; showSuccessPage(); }
+
+  function updateSubtitle(index) {
+    subtitle.classList.add('fade-out');
+    setTimeout(() => {
+      subtitle.innerHTML = messages[index].replace('\n', '<br>');
+      subtitle.classList.remove('fade-out');
+      subtitle.classList.add('fade-in');
+      setTimeout(() => subtitle.classList.remove('fade-in'), 300);
+    }, 250);
+  }
+
+  function growYesButton(scale) {
+    btnYes.style.transform = `scale(${scale})`;
+    btnYes.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    btnYes.style.padding = `${16 + state.noClickCount * 0.5}px ${40 + state.noClickCount * 1.5}px`;
+    btnYes.style.fontSize = `${Math.min(18 + state.noClickCount * 0.5, 36)}px`;
+  }
+
+  function getYesScale(c) { return 1 + (c * 0.12) + (Math.pow(c, 1.3) * 0.005); }
+  function getNoScale(c) { return Math.max(0.3, 1 - (c * 0.023)); }
+
+  function shrinkNoButton(scale) {
+    btnNo.style.transform = `scale(${scale})`;
+    btnNo.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    btnNo.style.opacity = Math.max(0.4, 1 - (state.noClickCount * 0.02));
+  }
+
+  function dodgeNoButton() {
+    if (state.isDodging) return;
+    state.isDodging = true;
+    const btnRect = btnNo.getBoundingClientRect();
+    const yesRect = btnYes.getBoundingClientRect();
+    const vw = window.innerWidth, vh = window.innerHeight;
+    let newX, newY, attempts = 0;
+    do { newX = 20 + Math.random() * (vw - btnRect.width - 40); newY = 20 + Math.random() * (vh - btnRect.height - 40); attempts++; }
+    while (checkCollision(newX, newY, btnRect.width, btnRect.height, yesRect) && attempts < 20);
+    btnNo.style.position = 'fixed'; btnNo.style.left = `${newX}px`; btnNo.style.top = `${newY}px`; btnNo.style.zIndex = '100';
+    btnNo.style.transition = 'left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    setTimeout(() => { state.isDodging = false; }, 300);
+  }
+
+  function checkCollision(x, y, w, h, r) { const p = 20; return !(x + w < r.left - p || x > r.right + p || y + h < r.top - p || y > r.bottom + p); }
+
+  function showSuccessPage() {
+    successOverlay.classList.add('active'); successOverlay.setAttribute('aria-hidden', 'false');
+    setTimeout(() => createConfetti(), 200); document.body.style.overflow = 'hidden';
+  }
+
+  function createConfetti() {
+    const canvas = confettiCanvas, ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const particles = [], colors = ['#E8395A','#FFB6C8','#FF6B8A','#FFD700','#FFFFFF','#FF69B4','#FF1493'];
+    for (let i = 0; i < 120; i++) {
+      particles.push({ x: Math.random()*canvas.width, y: -10-Math.random()*canvas.height*0.5,
+        w: 4+Math.random()*8, h: 4+Math.random()*8, color: colors[Math.floor(Math.random()*colors.length)],
+        vx: (Math.random()-0.5)*4, vy: 2+Math.random()*4, rot: Math.random()*360,
+        rs: (Math.random()-0.5)*10, op: 0.7+Math.random()*0.3, shape: Math.random()>0.5?'rect':'circle' });
+    }
+    let id, f = 0; const mx = 600;
+    function anim() {
+      if (f >= mx) { cancelAnimationFrame(id); ctx.clearRect(0,0,canvas.width,canvas.height); return; }
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      particles.forEach(p => {
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180); ctx.globalAlpha=p.op; ctx.fillStyle=p.color;
+        if(p.shape==='rect') ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+        else { ctx.beginPath(); ctx.arc(0,0,p.w/2,0,Math.PI*2); ctx.fill(); }
+        ctx.restore();
+        p.x+=p.vx; p.y+=p.vy; p.rot+=p.rs; p.vy+=0.05; p.vx*=0.99;
+        if(f>mx*0.7) p.op*=0.98;
+        if(p.x<-20) p.x=canvas.width+20; if(p.x>canvas.width+20) p.x=-20;
+      });
+      f++; id=requestAnimationFrame(anim);
+    }
+    anim();
+    window.addEventListener('resize', () => { canvas.width=window.innerWidth; canvas.height=window.innerHeight; });
+  }
+
+  function createFloatingHearts() {
+    const hearts = ['💕','💗','💖','♥','💓','🩷','🤍'];
+    for (let i = 0; i < 15; i++) {
+      const h = document.createElement('span'); h.classList.add('floating-heart');
+      h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+      h.style.left = `${Math.random()*100}%`; h.style.fontSize = `${12+Math.random()*20}px`;
+      h.style.animationDuration = `${8+Math.random()*12}s`; h.style.animationDelay = `${Math.random()*10}s`;
+      floatingHeartsContainer.appendChild(h);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initApp);
+})();
+  </script>
+</body>
+</html>
